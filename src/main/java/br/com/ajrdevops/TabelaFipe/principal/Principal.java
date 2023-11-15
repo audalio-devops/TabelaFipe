@@ -2,11 +2,15 @@ package br.com.ajrdevops.TabelaFipe.principal;
 
 import br.com.ajrdevops.TabelaFipe.model.Dados;
 import br.com.ajrdevops.TabelaFipe.model.Modelos;
+import br.com.ajrdevops.TabelaFipe.model.Veiculo;
 import br.com.ajrdevops.TabelaFipe.service.ConsumoApi;
 import br.com.ajrdevops.TabelaFipe.service.ConverteDados;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -32,9 +36,9 @@ public class Principal {
         if (opcao.toLowerCase().contains("car")) {
             endereco = URL_BASE + "carros/marcas";
         } else if (opcao.toLowerCase().contains("mo")) {
-            endereco = URL_BASE + "carros/marcas";
+            endereco = URL_BASE + "motos/marcas";
         } else {
-            endereco = URL_BASE + "carros/marcas";
+            endereco = URL_BASE + "caminhoes/marcas";
         }
 
         var json = consumo.obterDados(endereco);
@@ -45,7 +49,7 @@ public class Principal {
                 .sorted(Comparator.comparing(Dados::nome))
                 .forEach(System.out::println);
 
-        System.out.println("Informe o código da marca para consulta:");
+        System.out.println("\n Informe o código da marca para consulta:");
         var codigoMarca = leitura.nextLine();
 
         endereco = endereco + "/" + codigoMarca + "/modelos";
@@ -57,6 +61,37 @@ public class Principal {
                 .sorted(Comparator.comparing(Dados::nome))
                 .forEach(System.out::println);
 
+        System.out.println("\n Informe um trecho do nome do carro para consulta:");
+        var nomeVeiculo = leitura.nextLine();
+
+        List<Dados> modelosFiltrados = modeloLista.modelos().stream()
+                .filter( m->m.nome().toLowerCase().contains(nomeVeiculo.toLowerCase()))
+                .collect(Collectors.toList());
+
+        System.out.println("\n Modelos Filtrados : ");
+        modelosFiltrados.stream()
+                .sorted(Comparator.comparing(Dados::nome))
+                .forEach(System.out::println);
+
+        System.out.println("\n Informe o código do modelo para receber as avaliações:");
+        var codigoModelo = leitura.nextLine();
+
+        endereco = endereco + "/" + codigoModelo + "/anos";
+        json = consumo.obterDados(endereco);
+        List<Dados> anos = conversor.obterLista(json, Dados.class);
+
+        List<Veiculo> veiculos = new ArrayList<>();
+
+        for (int i = 0; i < anos.size(); i++) {
+            var enderecoAnos = endereco + "/" + anos.get(i).codigo() ;
+            json = consumo.obterDados(enderecoAnos);
+            Veiculo veiculo = conversor.obterDados(json, Veiculo.class);
+            veiculos.add(veiculo);
+
+        }
+
+        System.out.println("\n Todos os veículos filtrados com avaliações por ano: \n");
+        veiculos.forEach(System.out::println);
 
     }
 }
