@@ -9,8 +9,7 @@ Projeto de Desafio do primeiro curso da formação 'Avançando com Java' da Alur
 - Utilizar o Maven como gerenciador de dependências;
 - Utilizar o Jackson para desserialização dos dados;
 - Modelar as abstraçoes da aplicação através de records, classes, atributos e métodos; 
-- Consumir uma API para buscar os dados da Tabela FIP;
+- Consumir uma API para buscar os dados da Tabela FIPE;
 - Trabalhar com coleções e entender a fundo o uso das funções lambdas;
-- Conhecer a API de Streams e aplicar operações intermediárias como filter, sorted, map, flatMap, peek, entre outras;
-- Transformar streams em novas listas e mapas;
-- Gerar estatísticas personalizadas na aplicação.
+- Conhecer a API de Streams e aplicar operações intermediárias como filter, sorted, map, entre outras;
+- Transformar streams em novas listas;
